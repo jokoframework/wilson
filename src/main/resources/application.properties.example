@@ -1,0 +1,15 @@
+#
+# Ejemplo de configuracion para un proyecto tipo
+#
+
+#
+# Tipicamente solo se configura la BD
+#
+spring.datasource.url=jdbc\:postgresql\://localhost\:5432/wilson
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.datasource.username=postgres
+spring.datasource.password=postgres
+
+# Requisitos para Java 11 y Spring Boot 2
+spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
+spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true

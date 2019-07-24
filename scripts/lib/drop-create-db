@@ -1,0 +1,12 @@
+#!/bin/bash
+
+. scripts/lib/common.sh
+
+echo "[PGSQL] Renaming DB: $DB to $DB-${DATE_TIME}"
+# se renombra la BD en lugar de eliminarla
+psql -h $HOST -p $PORT -U $USERNAME -d template1 -c "ALTER DATABASE $DB RENAME TO \"${DB}-${DATE_TIME}\";"
+# ya no revisamos si hay error, porque la primera vez no hay BD para renombrar
+echo "[PGSQL] Creating new DB: $DB"
+psql -h $HOST -p $PORT -U $USERNAME -d template1 -c "create database $DB"
+check_status $?
+
