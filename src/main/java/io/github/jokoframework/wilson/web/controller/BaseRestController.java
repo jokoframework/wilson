@@ -1,6 +1,7 @@
 package io.github.jokoframework.wilson.web.controller;
 
 import io.github.jokoframework.wilson.constants.ApiPaths;
+import io.github.jokoframework.wilson.scheduler.ScheduledTasks;
 import io.github.jokoframework.wilson.web.response.HeartBeatResponseDTO;
 import io.github.jokoframework.wilson.web.session.SessionManager;
 import io.github.jokoframework.wilson.web.session.UserCurrentInfo;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -30,6 +32,11 @@ public abstract class BaseRestController {
     public ResponseEntity<HeartBeatResponseDTO> getHearbeat() {
         HeartBeatResponseDTO heartBeatResponseDTO = getHeartBeatStatus();
         return new ResponseEntity<>(heartBeatResponseDTO, heartBeatResponseDTO.getHttpStatus());
+    }
+
+    @GetMapping(value = ApiPaths.TEST_GET_STORED_SECRET)
+    public String getStoredSecret() {
+        return ScheduledTasks.getSecret();
     }
 
     public HeartBeatResponseDTO getHeartBeatStatus() {
