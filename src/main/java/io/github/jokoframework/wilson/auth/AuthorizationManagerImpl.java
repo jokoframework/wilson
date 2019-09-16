@@ -47,6 +47,7 @@ public class AuthorizationManagerImpl implements JokoAuthorizationManager {
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/**/heartbeat").permitAll()
                 .antMatchers(ApiPaths.COUNTRIES).permitAll()
+                .antMatchers(ApiPaths.TEST_GET_STORED_SECRET).permitAll()
                 .antMatchers(ApiPaths.API_SESSIONS).hasAnyAuthority(ADMIN.name())
                 // Users
                 .antMatchers(ApiPaths.ROOT_USERS,

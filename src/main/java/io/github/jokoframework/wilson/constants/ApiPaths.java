@@ -45,9 +45,13 @@ public class ApiPaths {
     public static final String PERSON_BY_NAME = ROOT_PERSON + "/{name}";
 
     public static final String PERSON_CSV = ROOT_PERSON + "/csv";
-    
+
+    /**
+     * route for scheduler management
+     */
+    public static final String TEST_GET_STORED_SECRET = BASE + "/test/get/secret";
+
     private ApiPaths() {
         
     }
-
 }
