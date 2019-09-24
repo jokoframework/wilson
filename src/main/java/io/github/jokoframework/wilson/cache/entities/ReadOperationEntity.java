@@ -2,8 +2,9 @@ package io.github.jokoframework.wilson.cache.entities;
 
 import io.github.jokoframework.wilson.cache.enums.ReadOperationHttpVerbEnum;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.persistence.Id;
 import java.io.Serializable;
@@ -11,19 +12,28 @@ import java.io.Serializable;
 @Document("readOperation")
 public class ReadOperationEntity implements Serializable {
     @Id
-    @Field("_id")
-    private String uri;
+    private ObjectId id;
+    @Indexed(unique = true)
+    private String resource;
     private ReadOperationHttpVerbEnum requestType;
     private Integer retryTimer;
     private Integer maxAge;
     private ReadCacheEntity responseCache;
 
-    public String getUri() {
-        return uri;
+    public ObjectId getId() {
+        return id;
     }
 
-    public void setUri(String uri) {
-        this.uri = uri;
+    public void setId(ObjectId id) {
+        this.id = id;
+    }
+
+    public String getResource() {
+        return resource;
+    }
+
+    public void setResource(String resource) {
+        this.resource = resource;
     }
 
     public ReadOperationHttpVerbEnum getRequestType() {
@@ -61,8 +71,8 @@ public class ReadOperationEntity implements Serializable {
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .appendSuper(super.toString())
-                .append("uri", uri)
+                .append("id", id)
+                .append("resource", resource)
                 .append("requestType", requestType)
                 .append("retryTimer", retryTimer)
                 .append("maxAge", maxAge)

@@ -47,7 +47,6 @@ public class AuthorizationManagerImpl implements JokoAuthorizationManager {
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/**/heartbeat").permitAll()
                 .antMatchers(ApiPaths.COUNTRIES).permitAll()
-                .antMatchers(ApiPaths.TEST_GET_STORED_SECRET).permitAll()
                 .antMatchers(ApiPaths.API_SESSIONS).hasAnyAuthority(ADMIN.name())
                 // Users
                 .antMatchers(ApiPaths.ROOT_USERS,
@@ -58,7 +57,7 @@ public class AuthorizationManagerImpl implements JokoAuthorizationManager {
                 .antMatchers(ApiPaths.WILSON_MASTER,
                         ApiPaths.WILSON_INSERT_READ_OPERATION,
                         ApiPaths.WILSON_LIST_READ_OPERATION,
-                        ApiPaths.WILSON_UPDATE_READ_OPERATION_CACHE).permitAll();
+                        ApiPaths.WILSON_UPDATE_READ_OPERATION_CACHE).hasAnyAuthority(ADMIN.name());
 
         // Only in dev profile,
         // Allows X-Frame-Options headers sent by H2 console.

@@ -17,7 +17,7 @@ public class WilsonMasterController {
     }
 
     @GetMapping(value = ApiPaths.WILSON_MASTER)
-    public ResponseEntity<Object> wilsonMasterGetRequest(@RequestParam(value = "service") String service){
-        return wilsonMasterService.processGetRequest(service);
+    public ResponseEntity<Object> wilsonMasterGetRequest(@RequestParam(value = "resource") String resource){
+        return wilsonMasterService.processGetRequest(resource);
     }
 }

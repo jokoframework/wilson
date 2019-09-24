@@ -27,9 +27,9 @@ public class WilsonMasterServiceImpl implements WilsonMasterService {
     @Autowired
     private OrikaBeanMapper mapper;
 
-    public ResponseEntity<Object> processGetRequest(String uriPathAndQuery) {
-        // A Read Operation is obtained with the uriPathAndQuery (Unique value)
-        Optional<ReadOperationEntity> readOperationEntity = readRepository.findByUri(uriPathAndQuery);
+    public ResponseEntity<Object> processGetRequest(String resource) {
+        // A Read Operation is obtained with the resource (Unique value)
+        Optional<ReadOperationEntity> readOperationEntity = readRepository.findByResource(resource);
 
         // If an entry was found and has a Cache entry it will return that otherwise it will try to call the request
         // right now, update the cache as required and return the response
@@ -39,7 +39,7 @@ public class WilsonMasterServiceImpl implements WilsonMasterService {
         }
 
         // TODO IMPLEMENT TRYING TO OBTAIN A RESPONSE FROM THE ORIGIN WHEN IT HAS NO CACHE (WETHER HE TRIES TO STORE IT OR NOT!)
-        LOGGER.info("Wilson did not find the Read Operation and still can't call the endpoint in this scenario, its a TODO ¯\\_(ツ)_/¯");
-        return new ResponseEntity<>("Wilson did not find the Read Operation and still can't call the endpoint in this scenario, its a TODO boys", HttpStatus.NO_CONTENT);
+        LOGGER.info("Wilson did not find the Read Operation and still can't call the endpoint in this scenario");
+        return new ResponseEntity<>("Wilson did not find the Read Operation and still can't call the endpoint in this scenario", HttpStatus.NO_CONTENT);
     }
 }

@@ -12,6 +12,6 @@ public interface ReadOperationRepository extends MongoRepository<ReadOperationEn
 
     public List<ReadOperationEntity> findAll();
 
-    public Optional<ReadOperationEntity> findByUri(String uri);
+    public Optional<ReadOperationEntity> findByResource(String resource);
 
 }
