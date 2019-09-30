@@ -1,7 +1,7 @@
 package io.github.jokoframework.wilson.cache.service.impl;
 
-import io.github.jokoframework.wilson.cache.entities.ReadCacheEntity;
 import io.github.jokoframework.wilson.cache.entities.ReadOperationEntity;
+import io.github.jokoframework.wilson.cache.entities.ResponseCacheEntity;
 import io.github.jokoframework.wilson.cache.repositories.ReadOperationRepository;
 import io.github.jokoframework.wilson.cache.service.ReadOperationService;
 import io.github.jokoframework.wilson.exceptions.ReadOperationException;
@@ -17,7 +17,6 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,7 +32,6 @@ public class ReadOperationServiceImpl implements ReadOperationService {
     @Autowired
     private OrikaBeanMapper mapper;
 
-    // TODO CREATE APPLICATION CONSTANTS
     @Value("${wilson.backend.base.url}")
     private String baseUrl;
 
@@ -57,9 +55,8 @@ public class ReadOperationServiceImpl implements ReadOperationService {
         // The request defined in the Read Operation is built and called
         HttpHeaders headers = new HttpHeaders();
 
-        // TODO MOVE INJECTING THE SECRET INTO HEADER TO A RestTemplate INTERCEPTOR
         if (ScheduledTasks.getAccessToken() != null) {
-            headers.add("X-JOKO-AUTH", ScheduledTasks.getAccessToken());
+            headers.set("X-JOKO-AUTH", ScheduledTasks.getAccessToken());
         }
 
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -72,20 +69,15 @@ public class ReadOperationServiceImpl implements ReadOperationService {
                 String.class);
 
         // A Read Cache is built using the Response and updates the Read Operation's "responseCache" field
-        ReadCacheEntity newCache = new ReadCacheEntity();
-        newCache.setHeaders(response.getHeaders());
-        newCache.setBody(response.getBody());
-        newCache.setStatusCode(response.getStatusCode());
+        ResponseCacheEntity responseCache = new ResponseCacheEntity(response);
 
-        saveReadCache(readOperationEntity.get().getResource(), newCache);
+        updateReadOperationResponseCache(readOperationEntity.get().getResource(), responseCache);
     }
 
-    // Pushes a new entry into the cache list of an operation
-    public void saveReadCache(String resource, ReadCacheEntity readCacheEntity) {
-        readCacheEntity.setTimeOfArrival(LocalDateTime.now());
+    public void updateReadOperationResponseCache(String resource, ResponseCacheEntity responseCacheEntity) {
         mongoTemplate.updateFirst(
                 Query.query(Criteria.where("resource").is(resource)),
-                new Update().set("responseCache", readCacheEntity),
+                new Update().set("responseCache", responseCacheEntity),
                 ReadOperationEntity.class);
     }
 }

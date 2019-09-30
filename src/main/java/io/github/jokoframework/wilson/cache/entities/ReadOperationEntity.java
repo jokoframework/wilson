@@ -1,6 +1,6 @@
 package io.github.jokoframework.wilson.cache.entities;
 
-import io.github.jokoframework.wilson.cache.enums.ReadOperationHttpVerbEnum;
+import io.github.jokoframework.wilson.cache.enums.ReadHttpVerbEnum;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -15,10 +15,10 @@ public class ReadOperationEntity implements Serializable {
     private ObjectId id;
     @Indexed(unique = true)
     private String resource;
-    private ReadOperationHttpVerbEnum requestType;
+    private ReadHttpVerbEnum requestType;
     private Integer retryTimer;
     private Integer maxAge;
-    private ReadCacheEntity responseCache;
+    private ResponseCacheEntity responseCache;
 
     public ObjectId getId() {
         return id;
@@ -36,11 +36,11 @@ public class ReadOperationEntity implements Serializable {
         this.resource = resource;
     }
 
-    public ReadOperationHttpVerbEnum getRequestType() {
+    public ReadHttpVerbEnum getRequestType() {
         return requestType;
     }
 
-    public void setRequestType(ReadOperationHttpVerbEnum requestType) {
+    public void setRequestType(ReadHttpVerbEnum requestType) {
         this.requestType = requestType;
     }
 
@@ -60,11 +60,11 @@ public class ReadOperationEntity implements Serializable {
         this.maxAge = maxAge;
     }
 
-    public ReadCacheEntity getResponseCache() {
+    public ResponseCacheEntity getResponseCache() {
         return responseCache;
     }
 
-    public void setResponseCache(ReadCacheEntity responseCache) {
+    public void setResponseCache(ResponseCacheEntity responseCache) {
         this.responseCache = responseCache;
     }
 

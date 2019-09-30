@@ -53,11 +53,17 @@ public class AuthorizationManagerImpl implements JokoAuthorizationManager {
                         ApiPaths.USERS_HEARTBEAT,
                         ApiPaths.USERS_BY_NAME,
                         ApiPaths.USERS_CSV).hasAnyAuthority(ADMIN.name())
-                // Wilson
-                .antMatchers(ApiPaths.WILSON_MASTER,
-                        ApiPaths.WILSON_INSERT_READ_OPERATION,
+                // Wilson Master
+                .antMatchers(ApiPaths.WILSON_MASTER).hasAnyAuthority(ADMIN.name())
+                // Wilson Read Operation
+                .antMatchers(ApiPaths.WILSON_INSERT_READ_OPERATION,
                         ApiPaths.WILSON_LIST_READ_OPERATION,
-                        ApiPaths.WILSON_UPDATE_READ_OPERATION_CACHE).hasAnyAuthority(ADMIN.name());
+                        ApiPaths.WILSON_UPDATE_READ_OPERATION_CACHE).hasAnyAuthority(ADMIN.name())
+                // Wilson Write Operation
+                .antMatchers(ApiPaths.WILSON_INSERT_WRITE_OPERATION,
+                        ApiPaths.WILSON_LIST_WRITE_OPERATION).hasAnyAuthority(ADMIN.name())
+                // Wilson Write Cache
+                .antMatchers(ApiPaths.WILSON_LIST_WRITE_CACHE).hasAnyAuthority(ADMIN.name());
 
         // Only in dev profile,
         // Allows X-Frame-Options headers sent by H2 console.

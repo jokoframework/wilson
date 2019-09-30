@@ -18,6 +18,7 @@ spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true
 # Cron String to define how often is the Login service reached
 scheduler.login.cron.timer=*/30 * * * * *
 scheduler.update.read.cache.cron.timer=*/5 * * * * *
+scheduler.execute.write.cache.cron.timer=*/5 * * * * *
 scheduler.login.url=http://localhost:9090/api/login
 scheduler.access.token.url=http://localhost:9090/api/token/user-access
 scheduler.login.username=admin
