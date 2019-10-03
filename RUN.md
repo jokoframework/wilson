@@ -8,6 +8,7 @@ https://github.com/jokoframework/joko_backend_starter_kit
 * Maven
 * Java 11 (JDK11)
 * Base de datos PostgreSQL con el nombre *wilson*
+* Base de datos MongoDB
 
 
 ## Clonar proyecto
@@ -111,6 +112,13 @@ Entrar en el directorio de jada proyecto y hacer lo siguiente:
     $ ./scripts/updater update
   ```
     
+# Step 6) Preparar base de datos MongoDB.
+Para guardar los datos sobre que servicios se desea que Wilson aplique sus funcionalidades de Cache y para guardar el cache mismo se utiliza
+una base de datos MongoDB, la configuración de los parametros de conexión a esta base de datos se deben configurar en el application.properties
+
+En el archivo de ejemplo para el application.properties que se encuentra en `src/main/resources/application.properties.examples` se detallan
+campos para definir el HOST, PORT y NAME de la base de datos de MongoDB a la que se conectara Wilson
+
 ## Correr desde una consola con `mvn` (Maven)
 
 Si es una consola nueva exportar las variables primero:
@@ -144,4 +152,3 @@ Esta guía es especifica para estos dos programas pero la mayoría de los IDEs s
 El proyecto cuenta con documentación del API accesible desde el swagger-ui. URI al swagger:
 
 http://localhost:8080/swagger/index.html
-
