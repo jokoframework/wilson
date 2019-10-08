@@ -5,10 +5,10 @@ https://github.com/jokoframework/joko_backend_starter_kit
 
 ## Requisitos para ejecutar el servicio
 
-* Maven
+* Maven 4.15 o mayor
 * Java 11 (JDK11)
-* Base de datos PostgreSQL con el nombre *wilson*
-* Base de datos MongoDB
+* Base de datos PostgreSQL 10.10 o mayor con el nombre *wilson*
+* Base de datos MongoDB 4.2 o mayor
 
 
 ## Clonar proyecto
