@@ -8,10 +8,6 @@ import java.util.Optional;
 
 public interface ReadOperationRepository extends MongoRepository<ReadOperationEntity, String> {
 
-    public ReadOperationEntity insert(ReadOperationEntity readOperationEntity);
-
-    public List<ReadOperationEntity> findAll();
-
     public Optional<ReadOperationEntity> findByResource(String resource);
 
 }

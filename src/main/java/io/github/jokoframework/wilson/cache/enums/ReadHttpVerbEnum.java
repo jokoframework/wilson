@@ -1,5 +1,5 @@
 package io.github.jokoframework.wilson.cache.enums;
 
-public enum ReadOperationHttpVerbEnum {
+public enum ReadHttpVerbEnum {
     GET
 }

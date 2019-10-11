@@ -41,13 +41,25 @@ public class ApiPaths {
     public static final String WILSON_MASTER = BASE + "/master";
 
     /**
-     * routes for helper endpoints on read operations and read operations cache
+     * routes for read operations
      */
     public static final String WILSON_INSERT_READ_OPERATION = BASE + "/insert/read-operation";
 
     public static final String WILSON_LIST_READ_OPERATION = BASE + "/list/read-operation";
 
     public static final String WILSON_UPDATE_READ_OPERATION_CACHE = BASE + "/update/cache";
+
+    /**
+     * routes for write operations
+     */
+    public static final String WILSON_INSERT_WRITE_OPERATION = BASE + "/insert/write-operation";
+
+    public static final String WILSON_LIST_WRITE_OPERATION = BASE + "/list/write-operation";
+
+    /**
+     * routes for write cache
+     */
+    public static final String WILSON_LIST_WRITE_CACHE = BASE + "/list/write-cache";
 
     /**
      * routes for people management

@@ -29,8 +29,4 @@ public class ReadOperationController {
         return readOperationService.listReadOperations();
     }
 
-    @GetMapping(value = ApiPaths.WILSON_UPDATE_READ_OPERATION_CACHE)
-    public void helperSaveReadCache(@RequestParam(value = "service") String service) throws ReadOperationException {
-        readOperationService.updateReadOperationCache(service);
-    }
 }
