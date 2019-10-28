@@ -16,8 +16,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.ConnectException;
 import java.util.Optional;
 
 @Service
@@ -40,24 +42,46 @@ public class WilsonMasterServiceImpl implements WilsonMasterService {
     @Value("${wilson.backend.base.url}")
     private String baseUrl;
 
+    private RestTemplate restTemplate = new RestTemplate();
+
     public ResponseEntity<String> processGetRequest(String resource) {
-        // The GET request to the resource is called
-        // TODO Add logic to first try to obtain a fresh response and return that!
-
-        // (Failed to get fresh response)
-        // Lookup if GET requests to the resource are being Cached
-        Optional<ReadOperationEntity> readOperationEntity = readOperationRepository.findByResource(resource);
-
-        // Return initial request response if Cache functionality is not available for the resource
-        // TODO If there is a Cache entry it must be checked that its not stale!
-        if (readOperationEntity.isEmpty() || readOperationEntity.get().getResponseCache() == null) {
-            LOGGER.info("Could not execute GET request and there was no Cache available");
-            return new ResponseEntity<>("Could not execute GET request and there was no Cache available", HttpStatus.INTERNAL_SERVER_ERROR);
+        // The GET request to the resource is called directly
+        HttpHeaders headers = new HttpHeaders();
+        if (ScheduledTasks.getAccessToken() != null) {
+            headers.set("X-JOKO-AUTH", ScheduledTasks.getAccessToken());
         }
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<>(headers);
 
-        // Cache is available and is fresh
-        ResponseCacheEntity responseCacheEntity = readOperationEntity.get().getResponseCache();
-        return new ResponseEntity<>(responseCacheEntity.getBody(), responseCacheEntity.getHeaders(), responseCacheEntity.getStatusCode());
+        try {
+            ResponseEntity<String> directResponse = restTemplate.exchange(baseUrl + resource,
+                    HttpMethod.GET,
+                    request,
+                    String.class);
+
+            LOGGER.info("Returning on-the-moment call to Endpoint, data as fresh as it can be!");
+            return directResponse;
+        } catch (ResourceAccessException e) {
+            // (Failed to get fresh response)
+            // Lookup if GET requests to the resource are being Cached
+            Optional<ReadOperationEntity> readOperationEntity = readOperationRepository.findByResource(resource);
+
+            // Return initial request response if Cache functionality is not available for the resource
+            // TODO If there is a Cache entry it must be checked for freshness!
+            if (readOperationEntity.isEmpty()) {
+                LOGGER.info("Could not execute GET request and there was no Cache available");
+                return new ResponseEntity<>("Could not contact the server and the resource is not being cached", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            if (readOperationEntity.get().getResponseCache() == null) {
+                LOGGER.info("Could not execute GET request and there was no Cache available");
+                return new ResponseEntity<>("Could not contact the server and while the resource is being cached, there is no stored cache", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+            // Cache is available and is fresh
+            LOGGER.info("Returning cached data, not the best case, not the worst");
+            ResponseCacheEntity responseCacheEntity = readOperationEntity.get().getResponseCache();
+            return new ResponseEntity<>(responseCacheEntity.getBody(), responseCacheEntity.getHeaders(), responseCacheEntity.getStatusCode());
+        }
     }
 
     // TODO Improve Try Catch error handling and create/add method's throwable Exceptions
@@ -70,7 +94,6 @@ public class WilsonMasterServiceImpl implements WilsonMasterService {
         }
 
         request = new HttpEntity<>(request.getBody(), headers);
-        RestTemplate restTemplate = new RestTemplate();
         try {
             return restTemplate.exchange(baseUrl + resource,
                     HttpMethod.POST,

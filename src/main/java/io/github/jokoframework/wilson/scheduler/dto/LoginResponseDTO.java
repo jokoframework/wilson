@@ -11,6 +11,16 @@ public class LoginResponseDTO {
     private String secret;
     private Date expiration;
 
+    public LoginResponseDTO() {
+    }
+    public LoginResponseDTO(String success, String errorCode, String message, String secret, Date expiration) {
+        this.success = success;
+        this.errorCode = errorCode;
+        this.message = message;
+        this.secret = secret;
+        this.expiration = expiration;
+    }
+
     public String getSuccess() {
         return success;
     }

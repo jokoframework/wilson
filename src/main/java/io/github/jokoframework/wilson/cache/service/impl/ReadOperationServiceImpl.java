@@ -9,6 +9,7 @@ import io.github.jokoframework.wilson.mapper.OrikaBeanMapper;
 import io.github.jokoframework.wilson.scheduler.ScheduledTasks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -34,6 +35,8 @@ public class ReadOperationServiceImpl implements ReadOperationService {
 
     @Value("${wilson.backend.base.url}")
     private String baseUrl;
+
+    private RestTemplate restTemplate = new RestTemplate();
 
     @Override
     public void insertReadOperation(ReadOperationEntity readOperation) {
@@ -61,7 +64,6 @@ public class ReadOperationServiceImpl implements ReadOperationService {
 
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> request = new HttpEntity<>(headers);
-        RestTemplate restTemplate = new RestTemplate();
 
         ResponseEntity<String> response = restTemplate.exchange(baseUrl + resource,
                 HttpMethod.GET,
@@ -74,10 +76,14 @@ public class ReadOperationServiceImpl implements ReadOperationService {
         updateReadOperationResponseCache(readOperationEntity.get().getResource(), responseCache);
     }
 
-    public void updateReadOperationResponseCache(String resource, ResponseCacheEntity responseCacheEntity) {
+    private void updateReadOperationResponseCache(String resource, ResponseCacheEntity responseCacheEntity) {
         mongoTemplate.updateFirst(
                 Query.query(Criteria.where("resource").is(resource)),
                 new Update().set("responseCache", responseCacheEntity),
                 ReadOperationEntity.class);
+    }
+
+    private void getRequestFromCache () {
+
     }
 }

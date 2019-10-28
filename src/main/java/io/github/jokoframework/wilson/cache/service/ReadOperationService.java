@@ -16,7 +16,4 @@ public interface ReadOperationService {
     // Insert Test Data for a GET request
     public void updateReadOperationCache(String service) throws ReadOperationException;
 
-    // ReadCache services
-    public void updateReadOperationResponseCache(String resource, ResponseCacheEntity newCache);
-
 }

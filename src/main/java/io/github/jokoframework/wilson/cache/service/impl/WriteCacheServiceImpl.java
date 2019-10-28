@@ -9,6 +9,7 @@ import io.github.jokoframework.wilson.scheduler.ScheduledTasks;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -31,6 +32,8 @@ public class WriteCacheServiceImpl implements WriteCacheService {
     @Value("${wilson.backend.base.url}")
     private String baseUrl;
 
+    private RestTemplate restTemplate = new RestTemplate();
+
     @Override
     public void insertWriteCache(WriteCacheEntity writeCacheEntity) {
         writeCacheRepository.insert(writeCacheEntity);
@@ -47,7 +50,6 @@ public class WriteCacheServiceImpl implements WriteCacheService {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<String> request = new HttpEntity<>(writeCacheEntity.getRequest().getBody(), headers);
-        RestTemplate restTemplate = new RestTemplate();
 
         ResponseEntity<String> response = restTemplate.exchange(baseUrl + writeCacheEntity.getResource(),
                 HttpMethod.POST,

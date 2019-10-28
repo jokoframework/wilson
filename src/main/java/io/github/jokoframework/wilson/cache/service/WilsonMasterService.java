@@ -1,6 +1,7 @@
 package io.github.jokoframework.wilson.cache.service;
 
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
 public interface WilsonMasterService {
