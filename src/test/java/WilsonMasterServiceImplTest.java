@@ -1,3 +1,6 @@
+import io.github.jokoframework.wilson.cache.entities.ReadOperationEntity;
+import io.github.jokoframework.wilson.cache.entities.ResponseCacheEntity;
+import io.github.jokoframework.wilson.cache.repositories.ReadOperationRepository;
 import io.github.jokoframework.wilson.cache.service.impl.WilsonMasterServiceImpl;
 import io.github.jokoframework.wilson.scheduler.ScheduledTasks;
 import io.github.jokoframework.wilson.scheduler.dto.LoginResponseDTO;
@@ -12,9 +15,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
 import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Date;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -25,6 +30,9 @@ public class WilsonMasterServiceImplTest {
 
     @Mock
     private RestTemplate restTemplate;
+
+    @Mock
+    private ReadOperationRepository readOperationRepository;
 
     @InjectMocks
     private WilsonMasterServiceImpl wilsonMasterServiceImpl = new WilsonMasterServiceImpl();
@@ -68,6 +76,34 @@ public class WilsonMasterServiceImplTest {
     public void getRequestFromCacheTest() {
         LOGGER.info("Testing when Wilson returns its Cache when Master is unavailable");
 
-        assertThat(true);
+        // The Service will recieve a Mocked response when getting the cached response
+        String countryResponseString = "[{\"id\": \"PY\", \"description\": \"Paraguay\"}, {\"id\": \"AR\", \"description\": \"Argentina\"}";
+        ResponseEntity<String> expectedResponse = new ResponseEntity(countryResponseString, HttpStatus.OK);
+
+        // On the moment call to Rest Master is mocked to fail
+        Mockito.when(restTemplate.exchange(
+                Mockito.eq("http://localhost:9090/api/countries"),
+                Mockito.eq(HttpMethod.GET),
+                Mockito.any(HttpEntity.class),
+                Mockito.eq(String.class)
+        )).thenThrow(ResourceAccessException.class);
+
+        // Cache with entry is mocked to recieve an acceptable value
+        ResponseCacheEntity responseCacheEntity = new ResponseCacheEntity();
+        responseCacheEntity.setBody(countryResponseString);
+        responseCacheEntity.setStatusCode(HttpStatus.OK);
+
+        ReadOperationEntity readOperationEntity = new ReadOperationEntity();
+        readOperationEntity.setResponseCache(responseCacheEntity);
+
+        Optional<ReadOperationEntity> optionalReadOperationEntity = Optional.of(readOperationEntity);
+
+        Mockito.when(readOperationRepository.findByResource(
+                Mockito.anyString()
+        )).thenReturn(optionalReadOperationEntity);
+
+        ResponseEntity<String> response = wilsonMasterServiceImpl.processGetRequest("/api/countries");
+        assertThat(response.equals(expectedResponse));
+        LOGGER.info("Returned result: " + response);
     }
 }

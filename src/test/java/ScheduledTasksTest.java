@@ -41,7 +41,7 @@ public class ScheduledTasksTest {
     @Test
     public void refreshTokensTest() {
         String refreshToken = "This is a mocked refresh token";
-        String accessToken = "This is a mocked refresh token";
+        String accessToken = "This is a mocked access token";
         LoginResponseDTO refreshTokenResponse = new LoginResponseDTO("true", null, null, refreshToken, new Date());
         LoginResponseDTO accessTokenResponse = new LoginResponseDTO("true", null, null, accessToken, new Date());
 
