@@ -35,7 +35,7 @@
         <aws-java-sdk-bom.version>1.11.233</aws-java-sdk-bom.version>
         <jjwt.version>0.6.0</jjwt.version>
         <swagger-springmvc.version>1.0.2</swagger-springmvc.version>
-        <httpclient.version>4.5.1</httpclient.version>
+        <httpclient.version>4.5.13</httpclient.version>
         <commons-text.version>1.1</commons-text.version>
     </properties>
 
