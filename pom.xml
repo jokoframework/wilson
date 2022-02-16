@@ -31,7 +31,7 @@
         <orika-core.version>1.4.6</orika-core.version>
 
         <dependency-check.version>5.2.0</dependency-check.version>
-        <postgresql.version>42.2.5</postgresql.version>
+        <postgresql.version>42.3.3</postgresql.version>
         <aws-java-sdk-bom.version>1.11.233</aws-java-sdk-bom.version>
         <jjwt.version>0.6.0</jjwt.version>
         <swagger-springmvc.version>1.0.2</swagger-springmvc.version>
